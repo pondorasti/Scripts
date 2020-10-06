@@ -1,3 +1,6 @@
+// Google Script
+// A bot to scrape images from a discord channel and repost them on Slack using Slack Bots and webhooks 
+
 const slackURL = '' // Add Slack webhook
 
 const discordBaseURL = 'https://discordapp.com/api'
@@ -6,9 +9,8 @@ const apiVersion = 'v6';
 const personalToken = '' // Add Discord access token
 const authorization = { 'authorization' : personalToken }
   
-const ftcServerID       = '225450307654647808'
-const designCadID       = '225451665602510850'
-const generalRoboticsID = '225450307654647808'
+const ftcServerID       = '' // Add server id
+const designCadID       = '' // Add channel id
   
 const filters = 'has=image'
   
