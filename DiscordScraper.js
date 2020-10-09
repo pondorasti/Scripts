@@ -1,19 +1,8 @@
 // Google Script
 // A bot to scrape images from a discord channel and repost them on Slack using Slack Bots and webhooks 
 
-const slackURL = '' // Add Slack webhook
-
-const discordBaseURL = 'https://discordapp.com/api'
-const apiVersion = 'v6';
-  
-const personalToken = '' // Add Discord access token
-const authorization = { 'authorization' : personalToken }
-  
-const ftcServerID       = '' // Add server id
-const designCadID       = '' // Add channel id
-  
 // Slack Bot Webhook
-const discordBaseURL = 'https://discordapp.com/api'
+const slackURL = '' // Add Slack webhook
 
 // Discord API
 const discordBaseURL = 'https://discordapp.com/api'
@@ -27,27 +16,13 @@ const authorization = { 'authorization' : personalToken }
 const ftcServerID       = '' // Add server id
 const designCadID       = '' // Add channel id
 
-const filters = 'has=image&has=embed'
+const filters = 'has=image&has=embed&has=video'
   
 const discordURL = `${discordBaseURL}/${apiVersion}/guilds/${ftcServerID}/messages/search?channel_id=${designCadID}&${filters}`
 const discordOptions = { 'method' : 'get', 'headers' : authorization }
 
 const scriptProperties = PropertiesService.getScriptProperties()
 const history = JSON.parse(scriptProperties.getProperty("history"))
-
-//history.splice(history.length - 10)
-//const index = history.indexOf("763197412738859069");
-//history.splice(index, 1);
-
-//mov, mpg, mp4
-const video = UrlFetchApp.fetch("https://www.youtube.com/watch?v=Cyeqd0A3U0U")
-var fileBlob = video.getBlob()
-var folder = DriveApp.getFoldersByName('Robotics').next();
-Logger.log(folder)
-//DriveApp.getRootFolder().createFile(fileBlob);
-//var result = folder.createFile(fileBlob);
-
-uploadFileToSlack()
 
 function requestMessages() {
   
@@ -82,6 +57,7 @@ function sendSlackMessage(message, attachment) {
   const messageDiscordURL = `discord://discordapp.com/channels/${ftcServerID}/${designCadID}/${messageID}`
   const messageWebURL = `https://discordapp.com/channels/${ftcServerID}/${designCadID}/${messageID}`
   
+  
   // Content Block
   const rawContent = message.content
   const content = rawContent
@@ -93,62 +69,63 @@ function sendSlackMessage(message, attachment) {
   .replace(/_/g, '*') // Add bold style
   .replace(/>/g, '') // Remove quote style
   .replace(/\n/g, '>') // Add block quote for each line
-  
   const contentBlock = `{"type": "section",
     "text": {
       "type": "mrkdwn",
       "text": ">${content}"
     }
   }`
-  Logger.log(content)
+  
   
   // Basic Blocks: Divider, Author, Source
-  const dividerBlock = `{"type": "divider"}`
-  const authorBlock = `{"type": "context",
-    "elements": [{
-        "type": "image",
-        "image_url": "${profilePictureURL}",
-        "alt_text": "cute cat"
-      }, {
-        "type": "mrkdwn",
-        "text": "*${username}*"
-      }]}`
-  const sourceBlock = `{
-    "type": "actions",
-      "elements": [
-        {
-          "type": "button",
-          "text": {
-            "type": "plain_text",
-            "text": "Open Desktop App",
-            "emoji": true
-          },
-          "value": "desktop",
-          "url": "${messageDiscordURL}",
-          "action_id": "desktop"
-        },
-        {
-          "type": "button",
-          "text": {
-            "type": "plain_text",
-            "text": "Open Web App",
-            "emoji": true
-          },
-          "value": "web",
-          "url": "${messageWebURL}",
-          "action_id": "web"
-        }
-      ]
-  }`
+  const dividerBlock = `{ "type": "divider"}`
+  const authorBlock = `{ "type": "context", "elements": [{
+    "type": "image",
+    "image_url": "${profilePictureURL}",
+    "alt_text": "cute cat"
+  }, {
+    "type": "mrkdwn",
+    "text": "*${username}*"
+  }]}`
+  const sourceBlock = `{ "type": "actions", "elements": [{
+    "type": "button",
+    "text": {
+      "type": "plain_text",
+      "text": "Open Desktop App",
+      "emoji": true
+    },
+    "value": "desktop",
+    "url": "${messageDiscordURL}",
+    "action_id": "desktop"
+  }, {
+    "type": "button",
+    "text": {
+      "type": "plain_text",
+      "text": "Open Web App",
+      "emoji": true
+    },
+    "value": "web",
+    "url": "${messageWebURL}",
+    "action_id": "web"
+  }]}`
+  
   
   // Create image blocks
   let imageBlocks = ""
+  const filesToUpload = []
   for (let attachmentIndex = 0; attachmentIndex < message.attachments.length; attachmentIndex += 1) {
     const attachment = message.attachments[attachmentIndex]
     const imageURL = attachment.proxy_url
     const imageName = attachment.filename
     
-    if (attachmentIndex != 0) { imageBlocks += "," }
+    if (isVideo(imageURL)) {
+      filesToUpload.push(imageURL)
+      continue
+    }
+    
+    if (!isImage(imageURL)) { continue }
+    
+    if (imageBlocks != "") { imageBlocks += "," }
     imageBlocks += `{"type": "image",
       "title": {
         "type": "plain_text",
@@ -157,14 +134,16 @@ function sendSlackMessage(message, attachment) {
       "image_url": "${imageURL}",
       "alt_text": "no alt for you"
    }`
+   uploadFileToDriveFrom(imageURL)
   }
+  
   
   // Create embed blocks
   for (let embedIndex = 0; embedIndex < message.embeds.length; embedIndex += 1) {
     const embed = message.embeds[embedIndex]
     const embedURL = embed.url
     
-    if (!embedURL.includes("media.discordapp.net")) { continue }
+    if (!isImage(embedURL)) { continue }
     
     if (imageBlocks != "") { imageBlocks += "," }
     imageBlocks += `{"type": "image",
@@ -175,9 +154,12 @@ function sendSlackMessage(message, attachment) {
       "image_url": "${embedURL}",
       "alt_text": "no alt for you"
    }`
+   uploadFileToDriveFrom(embedURL)
   }
   
-  let payload = `{ "blocks": [${dividerBlock}, ${authorBlock}`
+  // Create payload
+  let payload = `{ "blocks": [${dividerBlock}, ${authorBlock}] }`
+  payload = payload.slice(0, -3);
   if (content != "") { payload += "," + contentBlock }
   if (imageBlocks != "") { payload += "," + imageBlocks }                            
   payload += "," + sourceBlock + "]}"                          
@@ -189,22 +171,69 @@ function sendSlackMessage(message, attachment) {
   }
   
   UrlFetchApp.fetch(slackURL, options)
+  for (let index = 0; index < filesToUpload.length; index += 1) {
+    uploadFileToSlackFrom(filesToUpload[index])
+  }
 }
-                              
-function uploadFileToSlack() {
-  //curl -F file=@video0.mov -F "initial_comment=Hello" -F channels=G01CEU931R7 -H "Authorization: Bearer " https://slack.com/api/files.upload
+
+function uploadFileToSlackFrom(url) {
   
   const slackUploadURL = "https://slack.com/api/files.upload"
-  const header = `'headers' : {
-    "authorization" : " ",
-    "channels" : "G01CEU931R7"
-  }`
+  const header = { 'authorization' : 'Bearer' }
   
-  const video = UrlFetchApp.fetch("https://cdn.discordapp.com/attachments/225451665602510850/763611054113816616/woooo_pog.png")
-  var fileBlob = video.getBlob()
-    
-  UrlFetchApp.fetch(slackUploadURL, {
-    method: "post",
-    payload: video
-  });
+  const video = UrlFetchApp.fetch(url)
+  const videoBlob = video.getBlob()
+  
+  const options = {
+    'method'  : 'post',
+    'headers' : header,
+    'payload' : {
+      'file' : videoBlob,
+      'channels' : 'G01CEU931R7' 
+    }
+  }
+  
+  uploadToDrive(videoBlob)
+  UrlFetchApp.fetch(slackUploadURL, options);
+} 
+
+
+// Helper Functions
+
+// Upload a file to Google Drive from an URL 
+function uploadFileToDriveFrom(url) {
+ const file = UrlFetchApp.fetch(url)
+ const fileBlob = file.getBlob()
+ uploadToDrive(fileBlob)
+}
+
+// Upload a file to Google Drive
+function uploadToDrive(file) {
+  const folderName = 'Discord Scraper'
+  const folder = DriveApp.getFoldersByName(folderName).next();
+  folder.createFile(file);
+}
+
+// Check if string has an image format 
+function isImage(string) {
+  const formats = ['.jpg', '.png', '.jpeg', '.gif']
+  for (let format of formats) {
+    if (string.endsWith(format)) {
+      return true
+    }
+  }
+  
+  return false
+}
+
+// Check if stringe has a video format
+function isVideo(string) {
+  const formats = ['.mov', '.mp4']
+  for (let format of formats) {
+    if (string.endsWith(format)) {
+      return true
+    }
+  }
+  
+  return false
 }
