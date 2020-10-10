@@ -3,31 +3,30 @@
 
 // Slack Bot Webhook
 const slackURL = '' // Add Slack webhook
+const slackToken = '' // Add bot user OAuth access token
 
 // Discord API
 const discordBaseURL = 'https://discordapp.com/api'
 const apiVersion = 'v6';
-  
-// Personal Access Token
-const personalToken = '' // Add Discord access token
-const authorization = { 'authorization' : personalToken }
+const discordToken = '' // Add Discord personal access token
  
 // Discord Server Credentials 
-const ftcServerID       = '' // Add server id
-const designCadID       = '' // Add channel id
+const ftcServerID = '' // Add server id
+const designCadID = '' // Add channel id
+const filters = 'has=image&has=embed&has=video' // Search field filters
 
-const filters = 'has=image&has=embed&has=video'
+
+function requestDiscordMessages() {
   
-const discordURL = `${discordBaseURL}/${apiVersion}/guilds/${ftcServerID}/messages/search?channel_id=${designCadID}&${filters}`
-const discordOptions = { 'method' : 'get', 'headers' : authorization }
-
-const scriptProperties = PropertiesService.getScriptProperties()
-const history = JSON.parse(scriptProperties.getProperty("history"))
-
-function requestMessages() {
+  const discordURL = `${discordBaseURL}/${apiVersion}/guilds/${ftcServerID}/messages/search?channel_id=${designCadID}&${filters}`
+  const authorization = { 'authorization' : discordToken }
+  const discordOptions = { 'method' : 'get', 'headers' : authorization }
   
   const response = UrlFetchApp.fetch(discordURL, discordOptions).getContentText()
   const json = JSON.parse(response)
+  
+  const scriptProperties = PropertiesService.getScriptProperties()
+  const history = JSON.parse(scriptProperties.getProperty("history"))
   
   for (let sequenceIndex = json.messages.length - 1; sequenceIndex >= 0; sequenceIndex -= 1) {
     for (let messageIndex = 0; messageIndex < json.messages[sequenceIndex].length; messageIndex += 1) {
@@ -179,7 +178,7 @@ function sendSlackMessage(message, attachment) {
 function uploadFileToSlackFrom(url) {
   
   const slackUploadURL = "https://slack.com/api/files.upload"
-  const header = { 'authorization' : 'Bearer' }
+  const header = { 'authorization' : slackToken }
   
   const video = UrlFetchApp.fetch(url)
   const videoBlob = video.getBlob()
@@ -218,7 +217,7 @@ function uploadToDrive(file) {
 function isImage(string) {
   const formats = ['.jpg', '.png', '.jpeg', '.gif']
   for (let format of formats) {
-    if (string.endsWith(format)) {
+    if (string.includes(format)) {
       return true
     }
   }
@@ -230,7 +229,7 @@ function isImage(string) {
 function isVideo(string) {
   const formats = ['.mov', '.mp4']
   for (let format of formats) {
-    if (string.endsWith(format)) {
+    if (string.includes(format)) {
       return true
     }
   }
