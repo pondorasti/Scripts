@@ -27,6 +27,7 @@ function requestDiscordMessages() {
   
   const scriptProperties = PropertiesService.getScriptProperties()
   const history = JSON.parse(scriptProperties.getProperty("history"))
+  history.splice(0, history.length - 100); // Optimize memory used
   
   for (let sequenceIndex = json.messages.length - 1; sequenceIndex >= 0; sequenceIndex -= 1) {
     for (let messageIndex = 0; messageIndex < json.messages[sequenceIndex].length; messageIndex += 1) {
