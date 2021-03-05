@@ -1,0 +1,244 @@
+{
+  "groups" : [
+    {
+      "name" : "Gmail Archiver",
+      "path" : "Gmail Archiver",
+      "scriptCommands" : [
+
+      ]
+    },
+    {
+      "name" : "Media Docker Config",
+      "path" : "Media Docker Config",
+      "scriptCommands" : [
+
+      ]
+    },
+    {
+      "name" : "Raycast",
+      "path" : "Raycast",
+      "scriptCommands" : [
+        {
+          "authors" : [
+            {
+              "name" : "Alexandru Turcanu",
+              "url" : "https:\/\/github.com\/Pondorasti"
+            }
+          ],
+          "currentDirectoryPath" : null,
+          "description" : "Stop VPN connection.",
+          "filename" : "vpn-status.sh",
+          "hasArguments" : false,
+          "icon" : {
+            "dark" : null,
+            "light" : "📡"
+          },
+          "isTemplate" : false,
+          "language" : "bash",
+          "mode" : "inline",
+          "needsConfirmation" : null,
+          "packageName" : "Dashboard",
+          "refreshTime" : "1m",
+          "schemaVersion" : 1,
+          "title" : "VPN Status"
+        },
+        {
+          "authors" : [
+            {
+              "name" : "Alexandru Turcanu",
+              "url" : "https:\/\/github.com\/Pondorasti"
+            }
+          ],
+          "currentDirectoryPath" : null,
+          "description" : "Stop VPN connection.",
+          "filename" : "vpn-stop.sh",
+          "hasArguments" : false,
+          "icon" : {
+            "dark" : null,
+            "light" : "📡"
+          },
+          "isTemplate" : false,
+          "language" : "bash",
+          "mode" : "compact",
+          "needsConfirmation" : null,
+          "packageName" : "System",
+          "refreshTime" : null,
+          "schemaVersion" : 1,
+          "title" : "VPN Disconnect"
+        },
+        {
+          "authors" : [
+            {
+              "name" : "Caleb Stauffer",
+              "url" : "https:\/\/github.com\/crstauf"
+            }
+          ],
+          "currentDirectoryPath" : null,
+          "description" : "Test download and upload connection speed using [Speedtest](https:\/\/www.speedtest.net\/apps\/cli).",
+          "filename" : "speedtest.sh",
+          "hasArguments" : false,
+          "icon" : {
+            "dark" : null,
+            "light" : "images\/speedtest-logo.png"
+          },
+          "isTemplate" : false,
+          "language" : "bash",
+          "mode" : "inline",
+          "needsConfirmation" : null,
+          "packageName" : "Internet",
+          "refreshTime" : "1d",
+          "schemaVersion" : 1,
+          "title" : "Speedtest"
+        },
+        {
+          "authors" : [
+            {
+              "name" : "Alexandru Turcanu",
+              "url" : "https:\/\/github.com\/Pondorasti"
+            }
+          ],
+          "currentDirectoryPath" : null,
+          "description" : "Adds an invisible icon to the Dock as a separator.",
+          "filename" : "add-spacer-to-dock.sh",
+          "hasArguments" : false,
+          "icon" : {
+            "dark" : null,
+            "light" : "💻"
+          },
+          "isTemplate" : false,
+          "language" : "bash",
+          "mode" : "compact",
+          "needsConfirmation" : null,
+          "packageName" : "System",
+          "refreshTime" : null,
+          "schemaVersion" : 1,
+          "title" : "Add spacer to Dock"
+        },
+        {
+          "authors" : [
+            {
+              "name" : "Alexandru Turcanu",
+              "url" : "https:\/\/github.com\/Pondorasti"
+            }
+          ],
+          "currentDirectoryPath" : null,
+          "description" : "A simple script to open short links (make.sc) from Make School.",
+          "filename" : "ms-shortlink.sh",
+          "hasArguments" : true,
+          "icon" : {
+            "dark" : null,
+            "light" : "images\/makeschool-logo.png"
+          },
+          "isTemplate" : false,
+          "language" : "bash",
+          "mode" : "silent",
+          "needsConfirmation" : null,
+          "packageName" : "Make School",
+          "refreshTime" : null,
+          "schemaVersion" : 1,
+          "title" : "MS"
+        },
+        {
+          "authors" : null,
+          "currentDirectoryPath" : null,
+          "description" : "Pretty prints the JSON currently in the clipboard.",
+          "filename" : "prettify-json.sh",
+          "hasArguments" : false,
+          "icon" : {
+            "dark" : null,
+            "light" : "💻"
+          },
+          "isTemplate" : false,
+          "language" : "bash",
+          "mode" : "fullOutput",
+          "needsConfirmation" : null,
+          "packageName" : "Developer Utilities",
+          "refreshTime" : null,
+          "schemaVersion" : 1,
+          "title" : "Prettify JSON"
+        },
+        {
+          "authors" : [
+            {
+              "name" : "Jesse Claven",
+              "url" : "https:\/\/github.com\/jesse-c"
+            }
+          ],
+          "currentDirectoryPath" : null,
+          "description" : "Show the time from elsewhere in the world",
+          "filename" : "world-time.sh",
+          "hasArguments" : false,
+          "icon" : {
+            "dark" : null,
+            "light" : "🕐"
+          },
+          "isTemplate" : false,
+          "language" : "bash",
+          "mode" : "inline",
+          "needsConfirmation" : null,
+          "packageName" : "Dashboard",
+          "refreshTime" : "1m",
+          "schemaVersion" : 1,
+          "title" : "World Time"
+        },
+        {
+          "authors" : [
+            {
+              "name" : "Alexandru Turcanu",
+              "url" : "https:\/\/github.com\/Pondorasti"
+            }
+          ],
+          "currentDirectoryPath" : null,
+          "description" : "Start VPN connection.",
+          "filename" : "vpn-start.sh",
+          "hasArguments" : false,
+          "icon" : {
+            "dark" : null,
+            "light" : "📡"
+          },
+          "isTemplate" : false,
+          "language" : "bash",
+          "mode" : "compact",
+          "needsConfirmation" : null,
+          "packageName" : "System",
+          "refreshTime" : null,
+          "schemaVersion" : 1,
+          "title" : "VPN Connect"
+        },
+        {
+          "authors" : [
+            {
+              "name" : "Alexandru Turcanu",
+              "url" : "https:\/\/github.com\/Pondorasti"
+            }
+          ],
+          "currentDirectoryPath" : null,
+          "description" : "A simple script to mark attendance for Make School.",
+          "filename" : "ms-attendance.sh",
+          "hasArguments" : true,
+          "icon" : {
+            "dark" : null,
+            "light" : "images\/makeschool-logo.png"
+          },
+          "isTemplate" : false,
+          "language" : "bash",
+          "mode" : "silent",
+          "needsConfirmation" : null,
+          "packageName" : "Make School",
+          "refreshTime" : null,
+          "schemaVersion" : 1,
+          "title" : "Attend"
+        }
+      ]
+    },
+    {
+      "name" : "Discord Scraper",
+      "path" : "Discord Scraper",
+      "scriptCommands" : [
+
+      ]
+    }
+  ],
+  "totalScriptCommands" : 9,
+  "updatedAt" : "2021-03-05T19:38:00Z"
+}
