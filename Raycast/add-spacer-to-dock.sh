@@ -2,8 +2,13 @@
 
 # Required parameters:
 # @raycast.schemaVersion 1
+<<<<<<< Updated upstream
 # @raycast.title Add spacer to Dock
 # @raycast.mode silent
+=======
+# @raycast.title Add Spacer to Dock
+# @raycast.mode compact
+>>>>>>> Stashed changes
 
 # Optional parameters:
 # @raycast.icon 💻
@@ -16,3 +21,7 @@
 
 defaults write com.apple.dock persistent-apps -array-add '{"tile-type"="spacer-tile";}'
 killall Dock
+<<<<<<< Updated upstream
+=======
+echo "Added spacer to dock"
+>>>>>>> Stashed changes
