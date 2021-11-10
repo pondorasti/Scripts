@@ -13,7 +13,10 @@ services:
     environment:
       TZ: "America/Chicago"
       WEBPASSWORD: "${WEBPASSWORD}"
-      ServerIP: "192.168.0.120"
+      ServerIP: "192.168.0.143"
+      VIRTUAL_HOST: "senpi"
+      WEBTHEME: "default-dark"
+      PIHOLE_DNS_: "1.1.1.1;1.0.0.1"
     # Volumes store your data between container upgrades
     volumes:
       - "./etc-pihole/:/etc/pihole/"
