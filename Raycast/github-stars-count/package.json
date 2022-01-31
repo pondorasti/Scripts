@@ -3,7 +3,7 @@
   "name": "github-stars-count",
   "title": "GitHub Stars Count",
   "description": "Count total number of stars of a GitHub user.",
-  "icon": "command-icon.png",
+  "icon": "icon.png",
   "author": "Pondorasti",
   "license": "MIT",
   "commands": [
