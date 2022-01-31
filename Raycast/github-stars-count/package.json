@@ -1,16 +1,17 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "github-stars",
-  "title": "Github Stars",
-  "description": "Count total number of stars of a Github user.",
+  "name": "github-stars-count",
+  "title": "GitHub Stars Count",
+  "description": "Count total number of stars of a GitHub user.",
   "icon": "command-icon.png",
   "author": "Pondorasti",
   "license": "MIT",
   "commands": [
     {
       "name": "index",
-      "title": "Github Stars",
-      "description": "Template for showing a static list and a detail view",
+      "title": "Stars Count",
+      "subtitle": "GitHub",
+      "description": "Count total number of stars of a GitHub user.",
       "mode": "view"
     }
   ],
