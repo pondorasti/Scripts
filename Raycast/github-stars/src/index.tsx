@@ -1,23 +1,39 @@
-import { List, Detail, Icon } from "@raycast/api";
 import { useEffect, useState } from "react";
+import { List, Icon, Color, ImageMask } from "@raycast/api";
+import stars, { IResponse } from "./utils/stars";
 
 export default function Command() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [response, setResponse] = useState<IResponse | null>(null);
 
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 200);
+    async function fetchStars() {
+      const res = await stars("pondorasti");
+      setResponse(res);
+    }
+    fetchStars();
   }, []);
 
   return (
-    <List searchBarPlaceholder="Search username" isLoading={isLoading}>
-      {!isLoading && (
-        <>
-          <List.Item title="Augustiner Helles" />
-          <List.Item title="Camden Hells" />
-          <List.Item title="Leffe Blonde" />
-          <List.Item title="Sierra Nevada IPA" />
-        </>
-      )}
+    <List searchBarPlaceholder="Search username" isLoading={!response}>
+      {response &&
+        (response.message ? (
+          <List.Item title={response.message} icon={{ source: Icon.ExclamationMark, tintColor: Color.Red }} />
+        ) : (
+          <>
+            <List.Item title={`${response.stars} total stars`} icon={{ source: Icon.Star, tintColor: Color.Yellow }} />
+            {response.repos.map(({ name, description, stargazers_count, owner }) => (
+              <List.Item
+                title={name}
+                subtitle={description}
+                accessoryTitle={`${stargazers_count}  ★`}
+                icon={{
+                  source: owner.avatar_url,
+                  mask: ImageMask.Circle,
+                }}
+              />
+            ))}
+          </>
+        ))}
     </List>
   );
 }
