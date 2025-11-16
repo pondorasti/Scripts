@@ -1,9 +1,18 @@
 import { useState, useCallback } from "react";
 import { List, Icon, Color, ImageMask } from "@raycast/api";
 import debounce from "lodash.debounce"
-import stars, { IResponse } from "./utils/stars";
+import useSWRInfinite from "swr"
+import stars, { IResponse, Repository } from "./utils/stars";
+
+
+const fetcher = (url: string) => fetch(url).then(r => r.json())
+const getKey = (pageIndex: number, previousPageData: Repository[]) => {
+  if (previousPageData && !previousPageData.length) return null 
+  return `/users?page=${pageIndex}&limit=10`                  
+}
 
 export default function Command() {
+  // const { data, size, setSize } = useSWRInfinite(getKey, fetcher)
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState<IResponse | null>(null);
 
@@ -12,7 +21,7 @@ export default function Command() {
       if (!isLoading) {
         fetchStars(newValue);
       }
-    }, 400),
+    }, 450),
     []
   )
 

@@ -8,7 +8,7 @@ interface Owner {
   avatar_url: string;
 }
 
-interface Repository {
+export interface Repository {
   name: string;
   description: string;
   stargazers_count: number;
